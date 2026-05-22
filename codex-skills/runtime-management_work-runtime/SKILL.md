@@ -14,7 +14,6 @@ description: 하네스 워크플로를 실행하는 에이전트는 공유 트�
 
 ## Source of Truth
 - 이 문서는 공유 트리거 우선순위, 공유 검토 참조, 공유 MCP 사전 유효성 검사, 공유 중지 조건, 공유 보고서 형식 및 공유 텍스트 문서 쓰기 검증을 관리합니다. 워크플로별 실행 순서, 필수 검토 단계 순서 설계 또는 도구별 매개변수 규칙은 관리하지 않습니다.
-- `../skill-management_skill-modify-history/SKILL.md`는 규칙 문서가 수정될 때 필수 검토 단계 요구 사항 및 일일 기록 트리거 처리와 관련된 유일한 기준 문서입니다. `plan-review`, `source-review`, `result-review`, `re-review` 또는 `history/skill_YYYYMMDD.md`가 필요한지 여부를 결정할 때 이 파일을 참조하십시오. 공유 런타임 트리거, 중지 또는 보고 제어에는 이 파일을 사용하지 마십시오.
 - `../runtime-management_claude-review-runtime/SKILL.md`는 Claude 검토 시작, 로컬 사전 검사 및 차단 상태 처리와 관련된 유일한 기준 문서입니다. 필수 검토 단계가 시작되거나 실패해야 하는 방식을 결정할 때 이 파일을 참조하십시오. 공유 런타임 트리거, 중지 또는 보고 제어에는 이 파일을 사용하지 마십시오.
 - `../tool-usage-management_claude-cross-review-protocol/SKILL.md`는 Claude 협업 로그 필드 및 리뷰 정규화에 대한 유일한 기준 문서입니다. 공유 런타임 제어 위임이 아닌 리뷰 출력 기록 방식을 결정할 때 이 문서를 참조하십시오.
 - `../runtime-management_markdown-safe-writing/SKILL.md`는 여기에 정의된 공유 UTF-8 검증을 넘어 텍스트 문서 손상 복구 및 쓰기 경로 안전성 결정에 대한 유일한 기준 문서입니다. 공유 중지/보고 제어가 아닌 복구 또는 사고 처리 단계를 결정할 때 이 문서를 참조하십시오.
@@ -25,7 +24,6 @@ description: 하네스 워크플로를 실행하는 에이전트는 공유 트�
 - 경로별 트리거가 필요한 워크플로는 해결된 대상 경로가 `AGENTS`로 정의된 관리 폴더 외부에 있는 경우 실행되어서는 안 됩니다.
 
 ## Shared Review Reference Rules
-- 워크플로가 규칙 문서를 수정할 때, 필수 검토 단계 요구 사항 및 쓰기 실행 전후의 일일 기록 트리거 처리를 위해 `../skill-management_skill-modify-history/SKILL.md`를 참조해야 합니다.
 - 워크플로가 Claude 검토 단계를 호출할 때, 검토 시작, 로컬 사전 검사 및 차단 상태 처리를 위해 `../runtime-management_claude-review-runtime/SKILL.md`를 참조해야 합니다.
 - 워크플로가 Claude 검토 결과를 보고할 때, Claude 협업 로그 필드 및 정규화된 발견 출력에 대한 참조로 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`를 반드시 포함해야 합니다.
 
@@ -83,6 +81,6 @@ description: 하네스 워크플로를 실행하는 에이전트는 공유 트�
 ## Verification
 - 문서에는 `name`과 `description`만 포함된 유효한 프론트매터가 있습니다.
 - `AGENTS`에서 위임된 공유 런타임 제어는 워크플로별 실행 순서를 도입하지 않고 처리됩니다.
-- 공유 검토 참조는 규칙 텍스트를 중복하지 않고 `../skill-management_skill-modify-history/SKILL.md`, `../runtime-management_claude-review-runtime/SKILL.md` 및 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`를 가리킵니다.
+- 공유 검토 참조는 규칙 텍스트를 중복하지 않고 `../runtime-management_claude-review-runtime/SKILL.md` 및 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`를 가리킵니다.
 - 공유 MCP 사전 유효성 검사, 중지 조건, 보고서 형식 및 UTF-8 검증 규칙은 실행 가능합니다. 
 - `# Must NOT` 규칙은 범위 변경 및 잘못된 트리거 실행을 방지합니다.

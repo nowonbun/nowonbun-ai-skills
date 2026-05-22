@@ -21,7 +21,6 @@ description: 에이전트와 작성자는 관리되는 모든 문서에서 용�
 - 이 문서는 `./SKILL.md`에서 어휘 해석, 규칙 강도 해석, 레지스트리 범주 경계 및 용어 정규화 동작을 규정합니다. 단, 스킬 구성 작성 경계, 스킬 문서 형식 설계 또는 이력 기록 생성 시점은 규정하지 않습니다.
 - `../skill-management_constitution-rule/SKILL.md`는 스킬 구성 작성 경계에 대한 유일한 기준 문서입니다. 어휘 의미 또는 규칙 강도 해석이 아닌, 스킬 구성 계층, 우선순위 및 금지된 동작을 작성하는 방법을 결정할 때 이 문서를 참조하십시오.
 - `../skill-management_skill-create-rule/SKILL.md`는 스킬 문서 형식 제약 조건에 대한 유일한 기준 문서입니다. 어휘 의미 또는 레지스트리 범주 결정이 아닌, 스킬 문서의 구조 또는 작성 방법을 결정할 때 이 문서를 참조하십시오.
-- `../skill-management_skill-modify-history/SKILL.md` 파일은 근거/이력 기록 작업에 대한 유일한 기준 문서입니다. 어휘 규칙 수정 사항을 기록해야 하는지 여부와 방법을 결정할 때 이 파일을 참조하십시오. 어휘 레지스트리의 의미나 규칙 강도 해석을 위해 이 파일을 사용해서는 안 됩니다.
 
 ## Registry Control
 - `codex-skills/vocabulary-management/vocabulary-registry.md`에 활성 레지스트리를 유지 관리해야 합니다.

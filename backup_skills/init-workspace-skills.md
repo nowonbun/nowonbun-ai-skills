@@ -85,7 +85,7 @@ description: 워크스페이스나 프로젝트에 공통 지침과 스킬 시�
   -> Codex: `~/.codex/skills/coding-assistant/SKILL.md`
   -> Claude 기본: `~/.claude/skills/coding-assistant/SKILL.md`
   -> Claude 사용자 지정 시 대체: `~/.claude/skils/coding-assistant/SKILL.md`
-- `D:/work/nowonbun-harness/codex-skills/runtime-management/markdown-safe-writing.md`
+- `D:/work/nowonbun-ai-skills/codex-skills/runtime-management/markdown-safe-writing.md`
   -> Codex: `~/.codex/skills/markdown-safe-writing/SKILL.md`
   -> Claude 기본: `~/.claude/skills/markdown-safe-writing/SKILL.md`
   -> Claude 사용자 지정 시 대체: `~/.claude/skils/markdown-safe-writing/SKILL.md`

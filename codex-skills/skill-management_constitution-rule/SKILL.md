@@ -85,7 +85,6 @@ description: global_instructions를 주요 구성 대상으로 생성하거나 �
 - 이 문서는 `global_instructions.md` 및 `AGENTS.md`에 대한 헌법 문서 내용 경계, 계층 할당, 우선순위 규칙 및 운영 규칙 적용 범위를 규정합니다. 스킬 문서 작성 형식, 거버넌스 계층 또는 개정 이력 의무는 규정하지 않습니다.
 - `../skill-management_skill-create-rule/SKILL.md`는 스킬 문서의 구조 및 작성 형식 제약 조건에 대한 유일한 기준 문서입니다. 스킬 문서의 형식이나 구조를 결정할 때 이 문서를 참조하십시오. 헌법 계층 우선순위 관련 질문은 이 문서를 참조하지 마십시오.
 - `../skill-management_skill-governance-rule/SKILL.md`는 거버넌스 계층 정의 및 엄격 트리거 제어에 대한 유일한 기준 문서입니다. 스킬에 엄격한 승인이 필요한지 여부를 결정할 때 이 문서를 참조하십시오. 헌법 작성 관련 질문은 이 문서를 참조하지 마십시오.
-- `../skill-management_skill-modify-history/SKILL.md` 파일은 히스토리 기록 생성 의무 및 일별 기준에 대한 유일한 기준 문서입니다. 규칙 문서 개정에 히스토리 파일이 필요한지 여부를 결정할 때 이 파일을 참조해야 하며, 헌법 내용 경계를 판단할 때는 참조하지 마십시오.
 
 # Must NOT
 

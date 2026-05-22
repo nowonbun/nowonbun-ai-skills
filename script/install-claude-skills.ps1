@@ -12,17 +12,17 @@ $OutputEncoding = New-Object System.Text.UTF8Encoding $false
 
 # ===== 설정 =====
 # - SourceRoot: 저장소 루트 경로
-#   예) D:\work\nowonbun-agent-skills
-# - SkillSourceDir: SourceRoot 기준 스킬 원본 폴더(기본값 codex-skills)
-#   예) codex-skills
+#   예) D:\work\nowonbun-harness
+# - SkillSourceDir: SourceRoot 기준 스킬 원본 폴더(기본값 claude-skills)
+#   예) claude-skills
 # - 하위 폴더를 포함한 모든 .md 파일을 스킬로 간주한다.
-#   예) codex-skills\test1\test2\abc.md
-#     -> .codex\skills\test1_test2_abc\SKILL.md
-# - TargetDir: .codex 디렉터리의 상위 루트
+#   예) claude-skills\test1\test2\abc.md
+#     -> .claude\skills\test1_test2_abc\SKILL.md
+# - TargetDir: .claude 디렉터리의 상위 루트
 #   예) C:\Users\nowonbun
 $DefaultTargetDir = "C:\Users\nowonbun\"
-$DefaultSourceRoot = "D:\work\nowonbun-ai-skills"
-$DefaultSkillSourceDir = "codex-skills"
+$DefaultSourceRoot = "D:\work\nowonbun-harness"
+$DefaultSkillSourceDir = "claude-skills"
 
 if (-not $PSBoundParameters.ContainsKey("TargetDir")) {
     $TargetDir = $DefaultTargetDir
@@ -34,11 +34,6 @@ if (-not $PSBoundParameters.ContainsKey("SourceRoot")) {
 
 if (-not $PSBoundParameters.ContainsKey("SkillSourceDir")) {
     $SkillSourceDir = $DefaultSkillSourceDir
-}
-
-function Convert-ToForwardSlashPath {
-    param([Parameter(Mandatory = $true)][string]$Path)
-    return ($Path -replace "\\", "/")
 }
 
 function Test-SkillSheet {
@@ -72,103 +67,9 @@ function Test-SkillSheet {
     return ($null -ne $hasName -and $null -ne $hasDescription)
 }
 
-function Update-SkillConfig {
-    param(
-        [Parameter(Mandatory = $true)][string]$ConfigPath,
-        [Parameter(Mandatory = $true)][string[]]$SkillPaths,
-        [Parameter(Mandatory = $true)][string]$ManagedSkillsRoot
-    )
-
-    if (-not (Test-Path -LiteralPath $ConfigPath)) {
-        Set-Content -LiteralPath $ConfigPath -Value "" -Encoding utf8
-    }
-
-    $config = Get-Content -LiteralPath $ConfigPath -Raw -Encoding UTF8
-    if ($null -eq $config) {
-        $config = ""
-    }
-    $managedRootPrefix = (Convert-ToForwardSlashPath -Path $ManagedSkillsRoot).TrimEnd('/') + '/'
-    $managedRootPrefixEscaped = [regex]::Escape($managedRootPrefix)
-
-    $normalizedConfig = $config -replace "`r`n", "`n"
-    $lines = $normalizedConfig -split "`n", -1
-    $resultLines = New-Object System.Collections.Generic.List[string]
-    $currentBlock = New-Object System.Collections.Generic.List[string]
-
-    function Flush-SkillsConfigBlock {
-        param(
-            [System.Collections.Generic.List[string]]$BlockLines,
-            [System.Collections.Generic.List[string]]$OutputLines,
-            [string]$ManagedRootPrefixPattern
-        )
-
-        if ($BlockLines.Count -eq 0) {
-            return
-        }
-
-        $blockText = ($BlockLines -join "`n")
-        $normalizedBlockText = $blockText -replace '\\', '/'
-        $isManagedBlock = $normalizedBlockText -match "(?m)^\s*path\s*=\s*""$ManagedRootPrefixPattern.+""\s*$"
-        if (-not $isManagedBlock) {
-            foreach ($line in $BlockLines) {
-                $OutputLines.Add($line)
-            }
-        }
-        $BlockLines.Clear()
-    }
-
-    foreach ($line in $lines) {
-        if ($currentBlock.Count -gt 0) {
-            if ($line -match '^\[\[') {
-                Flush-SkillsConfigBlock -BlockLines $currentBlock -OutputLines $resultLines -ManagedRootPrefixPattern $managedRootPrefixEscaped
-                if ($line -eq '[[skills.config]]') {
-                    $currentBlock.Add($line)
-                }
-                else {
-                    $resultLines.Add($line)
-                }
-            }
-            else {
-                $currentBlock.Add($line)
-            }
-            continue
-        }
-
-        if ($line -eq '[[skills.config]]') {
-            $currentBlock.Add($line)
-            continue
-        }
-
-        $resultLines.Add($line)
-    }
-
-    Flush-SkillsConfigBlock -BlockLines $currentBlock -OutputLines $resultLines -ManagedRootPrefixPattern $managedRootPrefixEscaped
-
-    while ($resultLines.Count -gt 0 -and [string]::IsNullOrWhiteSpace($resultLines[$resultLines.Count - 1])) {
-        $resultLines.RemoveAt($resultLines.Count - 1)
-    }
-
-    foreach ($skillPath in $SkillPaths) {
-        if ($resultLines.Count -gt 0) {
-            $resultLines.Add("")
-        }
-        $resultLines.Add('[[skills.config]]')
-        $resultLines.Add("path = ""$skillPath""")
-        $resultLines.Add('enabled = true')
-        Write-Host "[ADD ] config.toml 등록: $skillPath"
-    }
-
-    $newConfig = ($resultLines -join [Environment]::NewLine)
-    if ($newConfig.Length -gt 0) {
-        $newConfig += [Environment]::NewLine
-    }
-    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-    [System.IO.File]::WriteAllText($ConfigPath, $newConfig, $utf8NoBom)
-}
-
 function Get-ManagedManifestPath {
-    param([Parameter(Mandatory = $true)][string]$CodexRoot)
-    return (Join-Path $CodexRoot "install-codex-skills.manifest.json")
+    param([Parameter(Mandatory = $true)][string]$ClaudeRoot)
+    return (Join-Path $ClaudeRoot "install-claude-skills.manifest.json")
 }
 
 function Get-PreviousManagedSkillNames {
@@ -286,10 +187,9 @@ if (-not (Test-Path -LiteralPath $TargetDir)) {
 
 $targetDirResolved = (Resolve-Path -LiteralPath $TargetDir).Path
 
-$codexRoot = Join-Path $targetDirResolved ".codex"
-$skillsRoot = Join-Path $codexRoot "skills"
-$configPath = Join-Path $codexRoot "config.toml"
-$manifestPath = Get-ManagedManifestPath -CodexRoot $codexRoot
+$claudeRoot = Join-Path $targetDirResolved ".claude"
+$skillsRoot = Join-Path $claudeRoot "skills"
+$manifestPath = Get-ManagedManifestPath -ClaudeRoot $claudeRoot
 
 New-Item -ItemType Directory -Path $skillsRoot -Force | Out-Null
 
@@ -306,8 +206,8 @@ $skillEntries = foreach ($file in $skillFiles) {
     $skillName = Get-SkillNameFromRelativePath -RelativePath $relativePath
 
     [pscustomobject]@{
-        SkillName = $skillName
-        SourcePath = $file.FullName
+        SkillName    = $skillName
+        SourcePath   = $file.FullName
         RelativePath = $relativePath
     }
 }
@@ -335,13 +235,8 @@ foreach ($entry in $skillEntries) {
     New-Item -ItemType Directory -Path $skillDir -Force | Out-Null
     Copy-Item -LiteralPath $entry.SourcePath -Destination $skillTargetPath -Force
     Write-Host "[COPY] $($entry.RelativePath) -> $skillTargetPath"
-
 }
 
-$skillPathsForToml = $skillEntries |
-    ForEach-Object { Convert-ToForwardSlashPath -Path (Join-Path (Join-Path $skillsRoot $_.SkillName) "SKILL.md") }
-
-Update-SkillConfig -ConfigPath $configPath -SkillPaths @($skillPathsForToml) -ManagedSkillsRoot $skillsRoot
 Save-ManagedSkillNames -ManifestPath $manifestPath -SkillNames @($currentSkillNames)
 
 Write-Host ""
@@ -349,4 +244,4 @@ Write-Host "완료:"
 Write-Host "- sourceRoot     : $sourceRootResolved"
 Write-Host "- skillSourceRoot: $skillSourceRoot"
 Write-Host "- targetDir      : $targetDirResolved"
-Write-Host "- config         : $configPath"
+Write-Host "- skillsRoot     : $skillsRoot"

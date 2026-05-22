@@ -1,6 +1,6 @@
 ---
 name: ai-collaboration-governance
-description: Codex와 Claude를 조율하는 담당자는 Claude MCP 협업 중에 확정적 타임아웃, 대체 처리 및 요청 크기 제어를 반드시 적용해야 합니다.
+description: Codex와 Claude를 조율하는 담당자는 사용자가 명시적으로 요청한 Claude MCP 협업에서 승인 확인, 타임아웃, 대체 처리 및 요청 크기 제어를 반드시 적용해야 합니다.
 ---
 
 # AI Collaboration Governance
@@ -8,13 +8,20 @@ description: Codex와 Claude를 조율하는 담당자는 Claude MCP 협업 중�
 # Must
 
 ## Scope
-- 구현 또는 검토 워크플로를 위해 Claude MCP 협업을 실행할 때 이 문서를 반드시 적용해야 합니다.
+- 사용자가 Codex와 Claude의 협업을 명시적으로 요청하여 Claude MCP 협업을 실행할 때 이 문서를 반드시 적용해야 합니다.
+- 사용자의 명시적 협업 요청이 없는 경우 Claude MCP 협업을 실행해서는 안 됩니다.
 - 타임아웃 방지, 대체 처리 및 요청 크기 제어에 대한 런타임 제어에 이 문서를 반드시 적용해야 합니다.
 
 ## Source of Truth
-- 이 문서는 `./SKILL.md`에 있는 Claude 협업 런타임 제어, 타임아웃 처리, 대체 흐름 및 요청 크기 제어를 규정합니다. 검토 결과 정규화, 협업 로그 필드 스키마 또는 기록 의무는 규정하지 않습니다.
+- 이 문서는 `./SKILL.md`에 있는 사용자 요청 기반 협업 승인, Claude 협업 런타임 제어, 타임아웃 처리, 대체 흐름 및 요청 크기 제어를 규정합니다. 검토 결과 정규화, 협업 로그 필드 스키마 또는 기록 의무는 규정하지 않습니다.
 - `../tool-usage-management_claude-cross-review-protocol/SKILL.md`는 검토 로그 필드, 검토 출력 형식 및 발견 정규화 결정에 대한 유일한 기준이 되는 문서입니다. Claude 검토 결과를 기록하는 방법을 결정할 때 이 문서를 참조하십시오. 런타임 시간 초과 또는 대체 제어 결정을 내릴 때는 이 문서를 참조하지 마십시오.
 - `CLAUDE.md`는 검토 정책 프로필 내용 및 검토 우선순위에 대한 유일한 기준이 되는 문서입니다. Claude 요청에 어떤 검토 관심사 또는 우선순위를 포함시킬지 결정할 때 이 문서를 참조하십시오. 런타임 전송 제어를 내릴 때는 이 문서를 참조하지 마십시오.
+
+## Collaboration Authorization Rules
+- Claude MCP 협업은 사용자가 현재 대화에서 Codex와 Claude의 협업 또는 Claude 검토 실행을 명시적으로 요청한 경우에만 시작해야 합니다.
+- 저장소 규칙, 스킬 규칙 또는 자동화 규칙은 사용자 명시 요청 없이 Claude MCP 협업을 자동으로 시작하는 근거로 사용해서는 안 됩니다.
+- 사용자 요청이 협업 실행 여부를 확정하지 않는 경우 Claude MCP 호출 전에 실행을 중지하고 사용자 확인을 요청해야 합니다.
+- 사용자 명시 요청이 확인된 경우 최종 보고서에 협업 요청 근거를 기록해야 합니다.
 
 ## Path Resolution Rules
 - 검토 정책 경로는 반드시 `CLAUDE.md`로 해석해야 합니다.
@@ -77,25 +84,30 @@ description: Codex와 Claude를 조율하는 담당자는 Claude MCP 협업 중�
 - Claude 협업 로그 필드 형식은 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`에 위임해야 합니다.
 
 # Must NOT
+- 사용자 명시 요청 없이 `mcp_servers.nowonbun_claude`를 호출해서는 안 됩니다.
+- 저장소 규칙, 스킬 규칙 또는 자동화 규칙만을 근거로 Claude MCP 협업을 시작해서는 안 됩니다.
 - 하나의 `mcp_servers.nowonbun_claude` 요청에 전체 `CLAUDE.md` 콘텐츠를 삽입해서는 안 됩니다. 
 - 타임아웃이 발생했다는 이유만으로 구현 또는 검토 단계를 건너뛰어서는 안 됩니다.
 - 타임아웃 또는 오류 발생 후 동일한 조건으로 즉시 재시도해서는 안 됩니다.
 - `../tool-usage-management_claude-cross-review-protocol/SKILL.md`에 속하는 교차 검토 로그 스키마를 재정의해서는 안 됩니다.
 
 # Flow
-1. `CLAUDE.md` 경로를 확인하고 요청을 무거운 요청 또는 가벼운 요청으로 분류합니다.
-2. 무거운 요청에 대한 상태 점검을 실행합니다.
-3. `CLAUDE.md`에서 검토 프로필 블록을 추출합니다.
-4. 프롬프트 크기 제한 및 요청 범위를 검증합니다.
-5. 제한을 초과하는 경우, 필요한 인수인계 구조를 사용하여 조사, 구현 및 검토 단계로 분할합니다.
-6. `mcp_servers.nowonbun_claude` 요청을 실행합니다.
-7. 타임아웃이 발생하면 쿨다운 및 타임아웃 대체 규칙을 적용합니다.
-8. 동일한 호출 체인에서 타임아웃이 반복적으로 발생하는 경우, 두 세션 대체 흐름으로 전환합니다. 
-9. 타임아웃 알림을 기록하고 검토 로그 스키마를 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`로 위임합니다.
+1. 현재 대화에서 사용자 명시 협업 요청이 있는지 확인합니다.
+2. 사용자 명시 협업 요청이 없으면 Claude MCP 협업을 시작하지 않고 차단 상태를 보고합니다.
+3. `CLAUDE.md` 경로를 확인하고 요청을 무거운 요청 또는 가벼운 요청으로 분류합니다.
+4. 무거운 요청에 대한 상태 점검을 실행합니다.
+5. `CLAUDE.md`에서 검토 프로필 블록을 추출합니다.
+6. 프롬프트 크기 제한 및 요청 범위를 검증합니다.
+7. 제한을 초과하는 경우, 필요한 인수인계 구조를 사용하여 조사, 구현 및 검토 단계로 분할합니다.
+8. `mcp_servers.nowonbun_claude` 요청을 실행합니다.
+9. 타임아웃이 발생하면 쿨다운 및 타임아웃 대체 규칙을 적용합니다.
+10. 동일한 호출 체인에서 타임아웃이 반복적으로 발생하는 경우, 두 세션 대체 흐름으로 전환합니다. 
+11. 타임아웃 알림을 기록하고 검토 로그 스키마를 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`로 위임합니다.
 
 # Definition of Done
 
 ## Verification
+- 런타임 실행 전에 `## Collaboration Authorization Rules`의 규칙이 충족됩니다.
 - 런타임 실행 전에 `## Path Resolution Rules`의 규칙이 충족됩니다.
 - 상태 확인 결정 전에 `## Request Classification Rules`의 규칙이 충족됩니다.
 - 과부하 요청 전에 `## Timeout and Healthcheck Rules`의 규칙이 충족됩니다.

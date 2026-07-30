@@ -9,6 +9,12 @@
 - `D:/work/nowonbun-ai-skills/codex-skills`
   - 역할: 구성 및 스킬 관리 참조 소스
   - 소유권 경계: 명시적인 편집 요청이 없는 한 참조 전용입니다.
+- `D:/work/nowonbun-ai-skills/claude-skills`
+  - 역할: Claude 스킬 및 공유 런타임 관리 영역
+  - 소유권 경계: 명시적인 편집 요청이 있는 경우에만 스킬 규칙과 관련 검증 문서를 수정합니다.
+- `D:/work/nowonbun-ai-skills/tests/claude`
+  - 역할: Claude 스킬별 비활성 TDD 검증 문서 영역
+  - 소유권 경계: `claude-skills`의 활성 스킬 규칙을 검증하는 문서만 관리하며, 활성 규칙 원본으로 취급하지 않습니다.
 - `D:/work/nowonbun-ai-skills/codex-skills/runtime-management_work-runtime`
   - 역할: 공유 런타임 제어 정의 영역
   - 소유권 경계: 워크플로별 규칙은 AGENTS.md에 유지하고, 여기서는 공유 제어만 관리합니다.
@@ -20,6 +26,7 @@
 
 ### 1.3 Runtime Rule Delegation
 - 공유 런타임 제어(트리거 충돌 처리, 공유 검토 참조 처리, MCP 사전 유효성 검사, 공유 중지 조건, 공유 보고서 형식 및 텍스트 문서 쓰기 검증)는 `D:/work/nowonbun-ai-skills/codex-skills/runtime-management_work-runtime/SKILL.md`에서 참조해야 합니다.
+- `claude-skills`를 대상으로 하는 워크플로는 동일한 공유 제어를 `D:/work/nowonbun-ai-skills/claude-skills/work-runtime/SKILL.md`에서 참조해야 합니다.
 - 워크플로 실행 전에 위임된 런타임 파일이 존재하고 읽을 수 있는지 확인해야 합니다.
 - 위임된 런타임 파일이 없거나 접근할 수 없는 경우 워크플로 실패 보고서와 함께 실행이 중지되어야 합니다.
 

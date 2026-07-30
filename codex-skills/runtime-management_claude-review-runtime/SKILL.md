@@ -38,8 +38,8 @@ description: 사용자가 Claude MCP 교차 검토를 명시적으로 요청한 
 
 ## Local Preflight Rules
 - Claude MCP를 호출하기 전에 `## User Request Authorization Rules`의 사용자 명시 요청 확인을 완료해야 합니다.
-- Claude MCP를 호출하기 전에 현재 환경에서 `mcp_servers.nowonbun_claude` 서버를 사용할 수 있는지 확인해야 합니다.
-- Claude MCP를 호출하기 전에 `mcp_servers.nowonbun_claude` 서버를 통해 최소한의 응답성 검사를 실행해야 하며, 이 검사는 정확한 출력으로 `OK`를 요구합니다.
+- Claude MCP를 호출하기 전에 현재 환경에서 `mcp_servers.nowonbun_claude` 서버와 `send_to_claude` 도구를 사용할 수 있는지 확인해야 합니다.
+- Claude MCP를 호출하기 전에 `mcp_servers.nowonbun_claude`의 `send_to_claude`로 최소한의 응답성 검사를 실행해야 하며, 이 검사는 비어 있지 않은 응답을 요구합니다.
 - MCP 가용성 검사에 실패하면 Claude 검토를 중지하고 `cross-review: blocked (reason: claude mcp unavailable)`를 보고해야 합니다.
 - 응답성 검사에 실패하면 Claude 검토를 중지하고 `cross-review: blocked (reason: claude mcp unresponsive)`를 보고해야 합니다.
 
@@ -56,7 +56,7 @@ description: 사용자가 Claude MCP 교차 검토를 명시적으로 요청한 
 
 ## Execution Rules
 - 로컬 사전 검사가 성공하면, 실제 Claude 호출 및 보고는 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`에 정의된 규칙을 따라야 합니다.
-- 이 하네스의 실행 진입점으로 `mcp_servers.nowonbun_claude`를 사용해야 합니다.
+- 이 하네스의 실행 진입점으로 `mcp_servers.nowonbun_claude`의 `send_to_claude`를 사용해야 합니다.
 - 호출 실패 시, `../tool-usage-management_claude-cross-review-protocol/SKILL.md`에 정의된 재시도 및 차단 상태 규칙을 따라야 합니다.
 - 각 `plan-review`, `source-review`, `result-review` 또는 `re-review` 후에는 활성 대화에서 사용자에게 검토 결과를 보고해야 합니다.
 - 사용자에게 표시되는 보고서에는 `단계`, `교차 검토 상태`, `요약`, `주요 결과` 및 `다음 조치`가 포함되어야 합니다.

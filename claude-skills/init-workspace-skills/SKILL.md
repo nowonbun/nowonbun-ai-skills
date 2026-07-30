@@ -1,77 +1,60 @@
 ---
 name: init-workspace-skills
-description: 워크스페이스나 프로젝트에 공통 지침과 스킬 시트를 초기화하거나 업데이트할 때 사용한다. global_instructions.md를 프로젝트 루트로 복사하고, 각 스킬 시트는 Codex와 Claude의 스킬 경로로 복사하며, 복사된 위치에 맞게 문서 내부 경로와 설정 경로를 수정한다.
+description: Use this skill to apply init-workspace-skills requirements when executing its defined task.
 ---
 
-# Init Workspace Skills Skill
+# Workspace Skill Initialization
 
-## 목적
-중앙 스킬 저장소의 `global_instructions.md`와 각 스킬 시트를 워크스페이스 또는 프로젝트 기준 위치로 초기화하고, 이후 업데이트 시 같은 규칙으로 덮어쓰기하는 절차를 고정한다.
+# Must
 
-## 규칙
-1. 소스 저장소는 기본적으로 `D:/work/nownobun-agent-skills`로 본다.
-2. `global_instructions.md`는 대상 프로젝트의 루트에 `global_instructions.md`로 복사한다.
-3. 소스 저장소의 각 스킬 시트(`*.md`)는 아래 대상 경로로 복사한다.
-   - Codex: `~/.codex/skills/<파일명에서 .md 제거>/SKILL.md`
-   - Claude 기본 경로: `~/.claude/skills/<파일명에서 .md 제거>/SKILL.md`
-   - 사용자가 실제 환경에서 `~/.claude/skils/<파일명에서 .md 제거>/SKILL.md`를 쓰면 `skills` 대신 그 경로 하나만 사용한다.
-4. 스킬 디렉터리명은 원본 파일명에서 확장자 `.md`를 제거한 값과 일치해야 한다. 예: `ai-agent.md` -> `~/.codex/skills/ai-agent/SKILL.md`, `~/.claude/skills/ai-agent/SKILL.md`
-5. 복사 대상 스킬 시트에는 `global_instructions.md`와 `CLAUDE.md`는 포함하지 않는다. 단, `CLAUDE.md`는 Claude Code가 프로젝트 루트에서 자동으로 읽으므로 별도 배포 없이 소스 저장소에서 관리한다.
-6. 복사 후에는 각 파일 내부에 남아 있는 원본 저장소 경로를 복사된 위치 기준 경로로 수정한다.
-7. 경로 수정 대상에는 원본 저장소 경로의 슬래시 표기 변형(`/` 및 `\`)이 모두 포함되어야 한다. 최소한 아래를 치환 대상으로 본다.
-   - `global_instructions.md`
-   - `D:/work/nownobun-agent-skills/<skill>.md`
-   - `global_instructions.md`
-   - `D:\work\nownobun-agent-skills\<skill>.md`
-8. 스킬 시트 안에서 다른 스킬 시트를 참조하는 경로는 복사된 경로 기준으로 바꾼다.
-   - Codex 기준: `~/.codex/skills/<대상스킬>/SKILL.md`
-   - Claude 기준: `~/.claude/skills/<대상스킬>/SKILL.md`
-   - 사용자가 `~/.claude/skils/...`를 쓰면 `skills` 대신 그 경로 기준으로 맞춘다.
-9. 설정 파일 반영 대상은 프로젝트 하위 `.codex/config.toml`가 아니라 사용자 홈 경로의 설정 파일로 본다.
-   - Codex: `~/.codex/config.toml`
-   - Claude 관련 설정 파일이 별도로 있으면 같은 원칙으로 반영한다.
-10. `~/.codex/config.toml`이 존재하면 아래를 함께 수정한다.
-   - `model_instructions_file`은 프로젝트 루트에 복사된 `global_instructions.md` 경로로 맞춘다.
-   - 스킬 경로 설정은 `~/.codex/skills/<스킬명>/SKILL.md` 기준으로 맞춘다.
-11. Claude용 설정 파일이 별도로 존재하면 아래를 함께 수정한다.
-   - 기본적으로 `~/.claude/skills/<스킬명>/SKILL.md`를 가리키도록 맞춘다.
-   - 사용자가 실제 환경에서 `~/.claude/skils/<스킬명>/SKILL.md`를 쓰면 그 경로로 대체한다.
-12. 사용자가 "초기화"를 말하면 대상 파일이 없어도 생성한다.
-13. 사용자가 "업데이트"를 말하면 기존 파일을 같은 규칙으로 덮어쓴다.
-14. 업데이트 시 기존에 복사되어 있는 파일 내용은 보존하지 않는다. 원본 시트를 기준으로 다시 복사하고 경로를 다시 치환한다.
-15. 복사와 경로 수정 후에는 최소한 아래를 검증한다.
-   - 프로젝트 루트의 `global_instructions.md` 존재 여부
-   - `~/.codex/skills/<스킬명>/SKILL.md` 존재 여부
-   - `~/.claude/skills/<스킬명>/SKILL.md` 또는 사용자가 지정한 `~/.claude/skils/<스킬명>/SKILL.md` 존재 여부
-   - 문서 내부에 원본 경로가 남아 있는지 여부
-   - 설정 파일 경로 반영 여부
+## Scope
+- Apply this skill when initializing or refreshing a workspace skill set.
+- Apply this skill to source identification, target identification, copying, reference conversion, and verification.
 
-## 절차
-1. 대상 프로젝트 루트 경로를 확인한다.
-2. `global_instructions.md`를 프로젝트 루트로 복사한다.
-3. 복사할 스킬 시트 목록을 정한다.
-4. 각 스킬 시트마다 아래 디렉터리를 만든다.
-   - `~/.codex/skills/<스킬명>/`
-   - `~/.claude/skills/<스킬명>/` 또는 사용자가 지정한 `~/.claude/skils/<스킬명>/`
-5. 각 스킬 시트를 각 디렉터리의 `SKILL.md`로 복사한다.
-6. 복사된 `global_instructions.md`와 각 `SKILL.md` 안의 경로를 새 위치 기준으로 수정한다.
-7. `~/.codex/config.toml`이 있으면 `model_instructions_file`과 스킬 경로를 수정한다.
-8. Claude용 설정 파일이 있으면 Claude 스킬 경로도 수정한다.
-9. 사용자가 업데이트를 요청한 경우에도 위 절차를 동일하게 반복하고 기존 파일은 덮어쓴다.
+## Source of Truth
+- This document governs initialization scope, copy boundaries, and reference validation.
+- skill-create-rule governs individual SKILL.md structure and writing rules.
+- markdown-safe-writing governs UTF-8 preservation checks.
 
-## 산출물 형식
-- 프로젝트 루트: `global_instructions.md`
-- Codex 사용자 홈 스킬 경로: `~/.codex/skills/<스킬명>/SKILL.md`
-- Claude 사용자 홈 스킬 경로: 기본 `~/.claude/skills/<스킬명>/SKILL.md`
-- Claude 사용자 지정 경로: 필요 시 `~/.claude/skils/<스킬명>/SKILL.md`
-- 설정 반영 대상: `~/.codex/config.toml` 및 Claude 관련 설정 파일
+## Rules
+- Verify source and target roots as single normalized real paths before copying.
+- Record the source list, target list, and overwrite list before writing.
+- Convert internal skill references to the target frontmatter name value.
+- Verify each converted name resolves to exactly one target skill.
+- Stop without writing if a source reference has no target mapping.
+- Verify name, description, Must, Must NOT, Definition of Done, and Verification after copying.
+- Verify every copied text file decodes as UTF-8.
 
-## 예시 매핑
-- `~/.claude/skills/ai-agent/SKILL.md`
-  -> Codex: `~/.codex/skills/ai-agent/SKILL.md`
-  -> Claude 기본: `~/.claude/skills/ai-agent/SKILL.md`
-  -> Claude 사용자 지정 시 대체: `~/.claude/skils/ai-agent/SKILL.md`
-- `~/.claude/skills/coding-assistant/SKILL.md`
-  -> Codex: `~/.codex/skills/coding-assistant/SKILL.md`
-  -> Claude 기본: `~/.claude/skills/coding-assistant/SKILL.md`
-  -> Claude 사용자 지정 시 대체: `~/.claude/skils/coding-assistant/SKILL.md`
+## Error Handling
+- Stop and report the failure if a source or target is missing or unreadable.
+- Report the failed file and rerun verification after a conversion or UTF-8 failure.
+- Stop if overwrite authorization is not confirmed.
+
+# Must NOT
+
+## Scope Violation
+- Do not copy to an unverified source or target path.
+- Do not convert an internal reference to a nonexistent skill name.
+- Do not report partial initialization as complete after a reference validation failure.
+
+## Data Safety
+- Do not declare text files valid without UTF-8 verification.
+- Do not modify configuration or user files outside the copy scope.
+
+# Flow
+
+1. Verify source, target, and overwrite scope.
+2. Prepare the skill inventory and reference map.
+3. Validate every mapping.
+4. Copy approved files and convert references.
+5. Verify structure, references, and UTF-8.
+6. Report results and rerun requirements.
+
+# Definition of Done
+
+## Verification
+- Source and target paths are normalized and readable.
+- Copy scope and overwrites are confirmed.
+- Every converted reference matches a target frontmatter name.
+- Every target SKILL.md has the required structure.
+- Every modified text file decodes as UTF-8.

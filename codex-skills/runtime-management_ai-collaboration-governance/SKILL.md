@@ -14,7 +14,7 @@ description: Codex와 Claude를 조율하는 담당자는 사용자가 명시적
 
 ## Source of Truth
 - 이 문서는 `./SKILL.md`에 있는 사용자 요청 기반 협업 승인, Claude 협업 런타임 제어, 타임아웃 처리, 대체 흐름 및 요청 크기 제어를 규정합니다. 검토 결과 정규화, 협업 로그 필드 스키마 또는 기록 의무는 규정하지 않습니다.
-- `../tool-usage-management_claude-cross-review-protocol/SKILL.md`는 검토 로그 필드, 검토 출력 형식 및 발견 정규화 결정에 대한 유일한 기준이 되는 문서입니다. Claude 검토 결과를 기록하는 방법을 결정할 때 이 문서를 참조하십시오. 런타임 시간 초과 또는 대체 제어 결정을 내릴 때는 이 문서를 참조하지 마십시오.
+- `../tool-usage-management_claude-cross-review-protocol/SKILL.md`는 검토 로그 필드, 검토 출력 형식, 발견 정규화 결정 및 Claude 호출 파라미터 규칙(`send_to_claude` 포함)에 대한 유일한 기준이 되는 문서입니다. Claude 검토 결과를 기록하거나 Claude 검토 호출 파라미터를 결정할 때 이 문서를 참조하십시오. 런타임 시간 초과 또는 대체 제어 결정을 내릴 때는 이 문서를 참조하지 마십시오.
 - `CLAUDE.md`는 검토 정책 프로필 내용 및 검토 우선순위에 대한 유일한 기준이 되는 문서입니다. Claude 요청에 어떤 검토 관심사 또는 우선순위를 포함시킬지 결정할 때 이 문서를 참조하십시오. 런타임 전송 제어를 내릴 때는 이 문서를 참조하지 마십시오.
 
 ## Collaboration Authorization Rules
@@ -37,7 +37,7 @@ description: Codex와 Claude를 조율하는 담당자는 사용자가 명시적
 
 ## Timeout and Healthcheck Rules
 - 각 `mcp_servers.nowonbun_claude` 검토 호출에 대해 최대 5분의 대기 시간을 적용해야 합니다.
-- 모든 헤비 요청 전에 `nowonbun_claude` 응답성 검사를 실행해야 하며, 이 검사의 출력은 `OK`여야 합니다.
+- 모든 헤비 요청 전에 `mcp_servers.nowonbun_claude`의 `send_to_claude`로 응답성 검사를 실행해야 하며, 응답 본문이 비어 있으면 타임아웃 대체 흐름을 시작해야 합니다.
 - 두 상태 점검 중 하나라도 5분 이내에 완료되지 않으면 헤비 요청을 중지하고 타임아웃 대체 흐름을 시작해야 합니다.
 
 ## CLAUDE Profile Injection Rules
@@ -99,7 +99,7 @@ description: Codex와 Claude를 조율하는 담당자는 사용자가 명시적
 5. `CLAUDE.md`에서 검토 프로필 블록을 추출합니다.
 6. 프롬프트 크기 제한 및 요청 범위를 검증합니다.
 7. 제한을 초과하는 경우, 필요한 인수인계 구조를 사용하여 조사, 구현 및 검토 단계로 분할합니다.
-8. `mcp_servers.nowonbun_claude` 요청을 실행합니다.
+8. `mcp_servers.nowonbun_claude`의 `send_to_claude`를 통해 Claude 실행 요청을 실행합니다.
 9. 타임아웃이 발생하면 쿨다운 및 타임아웃 대체 규칙을 적용합니다.
 10. 동일한 호출 체인에서 타임아웃이 반복적으로 발생하는 경우, 두 세션 대체 흐름으로 전환합니다. 
 11. 타임아웃 알림을 기록하고 검토 로그 스키마를 `../tool-usage-management_claude-cross-review-protocol/SKILL.md`로 위임합니다.

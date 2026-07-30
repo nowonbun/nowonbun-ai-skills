@@ -55,7 +55,7 @@ description: 변경 사항에 대해 Claude 교차 검토가 필요한 에이전
 - 각 호출에 대한 입력 요약을 기록해야 합니다.
 - `CLAUDE.md`에 정의된 검토 정책 우선순위를 사용해야 하며 다른 검토 정책 파일로 대체해서는 안 됩니다.
 - `../runtime-management_ai-collaboration-governance/SKILL.md`에 정의된 시간 초과, 대체 및 프롬프트 크기 제어를 준수해야 합니다.
-- `mcp_servers.nowonbun_claude`를 통해 Claude를 호출해야 하며 이 하네스 내의 CLI 진입점을 대체해서는 안 됩니다.
+- `mcp_servers.nowonbun_claude`의 `send_to_claude`를 통해 Claude를 호출해야 하며, 이 하네스 내의 CLI 진입점을 대체해서는 안 됩니다.
 - 시간 초과, 전송 실패 또는 MCP 오류로 인해 Claude 호출이 실패하는 경우 `../runtime-management_ai-collaboration-governance/SKILL.md`에 있는 재시도 및 대체 규칙을 적용해야 합니다.
 
 ## Review Normalization Rules
@@ -116,7 +116,7 @@ description: 변경 사항에 대해 Claude 교차 검토가 필요한 에이전
 4. 필수 검토 축을 정의하고 텍스트 문서가 범위에 포함되는 경우 UTF-8 무결성 검사를 추가합니다.
 5. 런타임 거버넌스의 가독성을 확인하고 호출 전에 프롬프트 크기 및 시간 초과 제어를 적용합니다.
 6. 필수 소스 문서 또는 대상 경로를 읽을 수 없는 경우 중지하고 이유와 함께 `cross-review: blocked`을 기록합니다.
-7. 하나의 목표와 명시적인 NG 전용 지침을 사용하여 `mcp_servers.nowonbun_claude`를 통해 Claude를 호출합니다.
+7. 하나의 목표와 명시적인 NG 전용 지침을 사용하여 `mcp_servers.nowonbun_claude`의 `send_to_claude`를 통해 Claude를 호출합니다.
 8. 호출에 실패하면 `../runtime-management_ai-collaboration-governance/SKILL.md`의 재시도 및 대체 규칙을 적용합니다.
 9. Claude 결과를 필수 필드와 허용 값으로 정규화합니다.
 10. 각 결과에 대한 증거를 확인하고 확인 불가능한 항목은 `미확인`으로 표시합니다.

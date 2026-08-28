@@ -1,6 +1,6 @@
 ---
 name: stock-mcp
-description: Use this skill to apply stock-mcp requirements when executing its defined task.
+description: StockSearcher MCP 서버를 사용하는 엔지니어는 시장 및 날짜 매개변수를 검증하고, 올바른 주식 도구를 선택하고, 쿼리 의도를 명확하게 보고하기 위해 이 스킬을 사용해야 합니다.
 ---
 
 # Stock MCP Skill

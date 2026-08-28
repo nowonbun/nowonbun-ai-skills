@@ -1,3 +1,8 @@
 # work-runtime
 
-This companion document points to SKILL.md for executable rules.
+AGENTS.md가 위임한 공통 실행 경계와 로컬 검증 기준을 제공합니다.
+
+- 읽기·평가 작업은 관련 자료를 확인하고 바로 보고합니다.
+- 요청 범위 안의 되돌릴 수 있는 로컬 변경은 별도 승인 없이 진행합니다.
+- 외부·파괴적 작업과 범위 확대만 실행 전 확인합니다.
+- 검증 깊이는 작업 위험과 관찰 가능한 영향에 비례합니다.

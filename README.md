@@ -1,6 +1,6 @@
 # nowonbun-harness
 
-Codex/Claude 기반 로컬 AI 작업 환경에서 사용하는 하네스 문서, 스킬 문서, 런타임 규칙, 보조 스크립트를 관리하는 저장소다.
+Codex 기반 로컬 AI 작업 환경에서 사용하는 하네스 문서, 스킬 문서, 런타임 규칙, 보조 스크립트를 관리하는 저장소다.
 
 현재 이 저장소의 중심은 애플리케이션 소스 코드 보관이 아니라, **에이전트 실행 규칙과 작업 자산 관리**다.
 
@@ -10,11 +10,12 @@ Codex/Claude 기반 로컬 AI 작업 환경에서 사용하는 하네스 문서,
 
 - 전역 규칙 문서: `global_instructions.md`
 - 워크스페이스 규칙 문서: `AGENTS.md`
-- Claude 리뷰 기준 문서: `CLAUDE.md`
+- 사용자 직접 실행용 Claude 검토 프로필: `CLAUDE.md`
 - Codex 스킬 문서 모음: `codex-skills/`
+- 사용자 직접 Claude 실행용 스킬 문서 모음: `claude-skills/`
 - 참고 문서: `doc/`
 - 배포 스크립트: `script/`
-- 변경 이력/보조 보관본: `history/`, `backup_skills/`, `claude-skills/`
+- 변경 이력/보조 보관본: `history/`, `backup_skills/`
 
 즉, 이 저장소는 “프로젝트 설명서”라기보다 **AI 에이전트 운영 체계와 스킬 자산을 관리하는 하네스 저장소**에 가깝다.
 
@@ -33,8 +34,8 @@ Codex/Claude 기반 로컬 AI 작업 환경에서 사용하는 하네스 문서,
 - 중지 조건과 보고 형식
 
 ### `CLAUDE.md`
-- Claude를 리뷰 AI로 사용할 때의 검토 기준
-- 리뷰 우선순위와 보고 기대치
+- 사용자가 Claude 또는 Claude Code를 직접 실행할 때 적용하는 수동 검토 기준
+- 헌법 계층이나 Codex 런타임 규칙이 아니며 자동 교차 검토를 시작하지 않음
 
 ## 디렉터리 구조
 
@@ -50,8 +51,6 @@ nowonbun-harness/
 │  ├─ action-management_automation/
 │  │  └─ SKILL.md
 │  ├─ action-management_reality-check/
-│  │  └─ SKILL.md
-│  ├─ runtime-management_claude-review-runtime/
 │  │  └─ SKILL.md
 │  ├─ runtime-management_work-runtime/
 │  │  └─ SKILL.md
@@ -107,18 +106,24 @@ nowonbun-harness/
 
 1. `global_instructions.md`
 2. `AGENTS.md`
-3. 필요 시 `CLAUDE.md`
-4. 해당 작업과 직접 관련된 `codex-skills/...` 문서
+3. 해당 작업과 직접 관련된 `codex-skills/...` 문서
+4. 사용자가 Claude를 직접 실행하여 검토할 때만 `CLAUDE.md`
 
 ## 저장소 성격 요약
 
 - 목적: 로컬 AI 작업 하네스 운영
 - 중심 자산: 규칙 문서, 스킬 문서, 런타임 제어 문서, 배포 스크립트
 - 주 사용 시나리오:
-  - Codex/Claude 작업 규칙 관리
+  - Codex 작업 규칙 관리
   - 스킬 문서 작성 및 배포
   - MCP 사용 규칙 정리
-  - 리뷰/검증 절차 유지
+  - 로컬 검증 절차 유지
+
+## 외부 AI 사용 원칙
+
+- Codex가 MCP나 CLI를 통해 다른 AI를 자동 호출하는 검토 체계는 사용하지 않는다.
+- 별도 AI 검토가 필요하면 사용자가 `CLAUDE.md`를 수동 검토 프로필로 사용해 직접 실행하고 필요한 결과만 현재 작업에 제공한다.
+- Codex 작업의 기본 완료 기준은 저장소 파일, 실행 로그 및 로컬 검증 결과다.
 
 ## 비고
 

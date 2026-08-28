@@ -1,6 +1,6 @@
 ---
 name: ai-agent
-description: Use this skill to apply ai-agent requirements when executing its defined task.
+description: AI 에이전트를 설계하는 엔지니어는 이 스킬을 사용하여 운영 문제, 결정 경계, 도구 계약 및 검증 계획을 정의해야 합니다.
 ---
 
 # AI Agent Skill

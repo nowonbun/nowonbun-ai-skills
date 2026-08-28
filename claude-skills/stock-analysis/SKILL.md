@@ -1,6 +1,6 @@
 ---
 name: stock-analysis
-description: Use this skill to apply stock-analysis requirements when executing its defined task.
+description: 주식을 분석하는 엔지니어는 기업, 재무, 차트 및 시장 흐름 분석을 구성하여 위험을 명확하게 보고할 때 이 기술을 활용해야 합니다.
 ---
 
 # Stock Analysis Skill

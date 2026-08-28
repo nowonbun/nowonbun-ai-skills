@@ -1,6 +1,6 @@
 ---
 name: mariadb-mcp
-description: Use this skill to apply mariadb-mcp requirements when executing its defined task.
+description: MariaDB MCP 서버를 사용하는 엔지니어는 이 스킬을 사용하여 연결 범위를 확인하고, 읽기 전용 권한을 준수하며, 실행 전에 SQL 유효성을 검사해야 합니다.
 ---
 
 # MariaDB MCP Skill

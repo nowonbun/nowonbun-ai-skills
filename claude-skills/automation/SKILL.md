@@ -1,6 +1,6 @@
 ---
 name: automation
-description: Use this skill to apply automation requirements when executing its defined task.
+description: 자동화를 설계하거나 개선하는 엔지니어는 이 기술을 사용하여 운영 가치를 평가하고, 실행 경계를 제어하고, 복구 절차를 정의해야 합니다.
 ---
 
 # Automation Skill

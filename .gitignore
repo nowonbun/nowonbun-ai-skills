@@ -106,3 +106,5 @@
 /source/Java/SpringExample/.settings
 /source/Java/SpringExample/build
 /source/Java/SpringExample/target
+config.toml.example
+/work

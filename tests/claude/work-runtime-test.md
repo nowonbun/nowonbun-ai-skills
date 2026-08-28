@@ -1,18 +1,24 @@
-# work-runtime TDD Test Specification
+# work-runtime 검증 명세
 
 ## Target
-- 스킬 규칙: ../claude-skills/work-runtime/SKILL.md
+- 스킬 규칙: ../../claude-skills/work-runtime/SKILL.md
+- 테스트 식별자: work-runtime-test.md
 
-## Test Cases
-1. Given 실행 작업. When TDD를 적용. Then 설계 → 테스트 사례 설계 → 계획 검토 → 실행 → 결과 검토 → 결과 보고순서를 지킨다.
-2. Given 테스트 사례. When 실행 시작. Then 성공 기준과 중지 조건이 문서화된다.
-3. Given 검토 요청. When Claude 교차 검토가 명시됐다. Then 전용 런타임을 사용한다.
-4. Given 결과. When 검토. Then 실행 로그 또는 파일 증거를 기록한다.
-5. Given 이 문서에서 공유 TDD 실행 순서 외의 워크플로별 실행 순서를 정의해서는 안 됩니다. When 조건이 충족된다. Then 해당 행동을 위반하지 않는다.
+## Checks
+1. 대상 파일은 UTF-8로 읽을 수 있어야 한다.
+2. frontmatter name은 work-runtime과 일치해야 한다.
+3. Must, Must NOT, Definition of Done H1이 존재해야 한다.
+4. U+FFFD 대체 문자가 없어야 한다.
+5. 상대 SKILL.md 참조가 있으면 실제 파일로 확인되어야 한다.
 
 ## Verification Command
 ~~~powershell
 $target = Resolve-Path 'D:/work/nowonbun-ai-skills/claude-skills/work-runtime/SKILL.md'
 $test = Resolve-Path 'D:/work/nowonbun-ai-skills/tests/claude/work-runtime-test.md'
-(Get-Content $target -Raw -Encoding UTF8).Length -gt 0 -and (Get-Content $test -Raw -Encoding UTF8) -match [regex]::Escape('work-runtime')
+$text = Get-Content -LiteralPath $target -Raw -Encoding UTF8
+$text.Length -gt 0 -and $text -match 'name:\s*work-runtime' -and $text -match '# Must' -and $text -match '# Must NOT' -and $text -match '# Definition of Done' -and -not $text.Contains([char]0xFFFD) -and (Get-Content -LiteralPath $test -Raw -Encoding UTF8).Length -gt 0
 ~~~
+
+## Expected Evidence
+- 대상과 검증 문서는 UTF-8로 읽힌다.
+- identity와 필수 구조를 실행 로그로 확인할 수 있다.

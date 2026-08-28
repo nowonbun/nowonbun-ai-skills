@@ -1,6 +1,6 @@
 ---
 name: init-workspace-skills
-description: Use this skill to apply init-workspace-skills requirements when executing its defined task.
+description: 스킬 세트를 다른 위치로 초기화하거나 갱신할 때 원본·대상 검증, 내부 참조 변환 및 복사 후 구조 검증을 수행합니다.
 ---
 
 # Workspace Skill Initialization

@@ -1,6 +1,6 @@
 ---
 name: research
-description: Use this skill to apply research requirements when executing its defined task.
+description: 주제를 분석하는 엔지니어는 질문을 정의하고, 사실과 해석을 구분하고, 다양한 관점을 비교하고, 불확실성을 명확하게 표현하기 위해 이 기술을 사용해야 합니다.
 ---
 
 # Research Skill

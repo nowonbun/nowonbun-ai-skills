@@ -1,6 +1,6 @@
 ---
 name: reality-check
-description: Use this skill to apply reality-check requirements when executing its defined task.
+description: 낙관적이거나 편향된 판단에 이의를 제기하는 엔지니어는 누락된 가정, 하방 위험, 조건부 대안을 드러내기 위해 이 스킬을 사용해야 합니다.
 ---
 
 # Reality Check Skill

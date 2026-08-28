@@ -90,10 +90,10 @@
 
 ## Runtime
 
-2. 어휘 스킬은 모든 작업 시작 전에 호출해야 합니다.
-3. 2단계 이후에는 현재 작업에 필요한 스킬만 호출해야 합니다.
-4. 작업 실행은 작성 시간 단계와 2~3단계가 모두 완료된 후에만 시작해야 합니다.
-5. 필요한 스킬 중 하나라도 등록되지 않았거나, 접근할 수 없거나, 사용할 수 없는 경우, 사용자 확인을 받을 때까지 실행을 중지해야 합니다.
+2. 현재 작업의 대상과 실행 방식에 직접 필요한 스킬만 선택해야 합니다.
+3. 어휘 스킬은 규칙 문서를 작성·검토하거나 용어의 모호성이 실행 결정에 영향을 줄 때만 선택해야 합니다.
+4. 선택적 보조 스킬을 사용할 수 없는 경우에는 안전 경계를 유지하는 로컬 대체 절차로 진행할 수 있습니다.
+5. 작업의 안전한 완료에 필수인 스킬을 사용할 수 없고 대체 절차도 없는 경우에만 실행을 중지하고 사용자에게 확인을 요청해야 합니다.
 
 ## Harness Composition Flow (PlantUML)
 
@@ -101,9 +101,8 @@
 @startuml
 start
 :Author global_instructions and AGENTS;
-:Invoke vocabulary skill;
 :Invoke required skills only;
-if (Any required skill unavailable?) then (yes)
+if (Required skill and fallback unavailable?) then (yes)
   :Stop;
   :Request user confirmation;
   stop

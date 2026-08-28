@@ -1,28 +1,29 @@
-# skill-check-rule TDD Test Specification
+# skill-check-rule 검증 명세
 
 ## Target
-- 스킬 규칙: ../codex-skills/skill-management_skill-check-rule/SKILL.md
+- 스킬 규칙: ../../codex-skills/skill-management_skill-check-rule/SKILL.md
 - 테스트 식별자: skill-check-rule-test.md
 
-## Preconditions
-- 대상 파일이 존재하고 UTF-8로 읽힌다.
-- skill-check-rule은 대상 SKILL.md의 frontmatter name과 일치한다.
-
-## Test Cases
-1. Given 실행 작업의 설계가 필요하다. When 공유 TDD 실행 순서를 적용한다. Then 순서는 설계 → 테스트 사례 설계 → 계획 검토 → 실행 → 결과 검토 → 결과 보고이다.
-2. Given 테스트 사례를 설계한다. When 실행 시작 조건을 판정한다. Then 테스트 사례는 성공 기준, 실패 또는 중지 조건, 검증 방법을 포함한다.
-3. Given 계획 검토나 결과 검토가 요청되었다. When Claude 교차 검토가 명시적으로 요청되었다. Then claude-review-runtime과 claude-cross-review-protocol을 적용한다.
-4. Given 실행이 완료되었다. When 결과 검토를 수행한다. Then 검증 결과는 실행 로그 또는 파일 검사 증거로 기록한다.
-
-5. Given 증거 없이 항목을 통과시켜서는 안 됩니다. When 해당 규칙의 적용 조건이 충족된다. Then 대상 스킬은 해당 행동을 위반하지 않는다.
+## Checks
+1. 대상 파일은 UTF-8로 읽을 수 있어야 한다.
+2. frontmatter name은 skill-check-rule과 일치해야 한다.
+3. Must, Must NOT, Definition of Done H1이 존재해야 한다.
+4. U+FFFD 대체 문자가 없어야 한다.
+5. 상대 SKILL.md 참조가 있으면 실제 파일로 확인되어야 한다.
+6. 루트 저장소 지도와 수동 검토 프로필이 검사 범위에 포함되어야 한다.
+7. `.claude/worktrees` 복제본이 활성 검사 대상에서 제외되어야 한다.
 
 ## Verification Command
 ~~~powershell
 $target = Resolve-Path 'D:/work/nowonbun-ai-skills/codex-skills/skill-management_skill-check-rule/SKILL.md'
-$test = Resolve-Path 'D:/work/nowonbun-ai-skills/tests/skill-check-rule-test.md'
-(Get-Content $target -Raw -Encoding UTF8).Length -gt 0 -and (Get-Content $test -Raw -Encoding UTF8) -match [regex]::Escape('skill-check-rule')
+$readme = Resolve-Path 'D:/work/nowonbun-ai-skills/README.md'
+$manualReview = Resolve-Path 'D:/work/nowonbun-ai-skills/CLAUDE.md'
+$test = Resolve-Path 'D:/work/nowonbun-ai-skills/tests/codex/skill-check-rule-test.md'
+$text = Get-Content -LiteralPath $target -Raw -Encoding UTF8
+$text.Length -gt 0 -and $text -match 'name:\s*skill-check-rule' -and $text.Contains('global_instructions.md') -and $text.Contains('README.md') -and $text.Contains('.claude/worktrees') -and (Get-Content -LiteralPath $readme -Raw -Encoding UTF8).Contains('CLAUDE.md') -and (Get-Content -LiteralPath $manualReview -Raw -Encoding UTF8).Contains('수동 검토 프로필') -and $text -match '# Must' -and $text -match '# Must NOT' -and $text -match '# Definition of Done' -and -not $text.Contains([char]0xFFFD) -and (Get-Content -LiteralPath $test -Raw -Encoding UTF8).Length -gt 0
 ~~~
 
 ## Expected Evidence
-- 스킬 및 테스트 파일은 UTF-8로 읽힌다.
-- 대상 경로, 테스트 식별자, TDD 게이트, 검증 명령이 존재한다.
+- 대상과 검증 문서는 UTF-8로 읽힌다.
+- identity와 필수 구조를 실행 로그로 확인할 수 있다.
+- 루트 저장소 지도, 수동 검토 프로필 및 worktree 제외 규칙이 확인된다.

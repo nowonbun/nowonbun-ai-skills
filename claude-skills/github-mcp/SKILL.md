@@ -1,6 +1,6 @@
 ---
 name: github-mcp
-description: Use this skill to apply github-mcp requirements when executing its defined task.
+description: GitHub MCP를 사용하는 엔지니어는 GitHub API 작업과 Git CLI 작업을 분리하고 쓰기 작업 전에 저장소 대상 식별자를 검증하기 위해 이 스킬을 사용해야 합니다.
 ---
 
 # GitHub MCP Skill

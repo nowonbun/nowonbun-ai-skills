@@ -29,7 +29,7 @@ description: 주식을 분석하는 엔지니어는 기업, 재무, 차트 및 �
 - 근거가 없는 가정은 `unverified`으로 표시해야 합니다.
 - 사용자의 비현실적인 판단에 대해서는 직접적으로 이의를 제기하고, 더 안전한 대안이나 더 좁은 해석을 제시해야 합니다.
 
-- 분석에 `stock_data`, `list_predict_dates`, `predict_rows` 또는 `scanner_rows`가 필요하다고 판단한 경우, 왜 그 도구가 필요한지와 어떤 데이터 공백을 메우는지를 먼저 설명해야 합니다.
+- 도구 조회 전 설명은 stock-mcp의 조회 목적 규칙을 따르며 같은 데이터 공백을 호출마다 다시 설명하지 않아야 합니다.
 - `stock_data`, `list_predict_dates`, `predict_rows`의 실제 선택 기준과 필수 매개변수는 이 문서에서 중복 정의하지 말고 `../tool-usage-management_stock-mcp/SKILL.md`를 참조해야 합니다.
 
 ## Minimum Analysis Coverage Rules

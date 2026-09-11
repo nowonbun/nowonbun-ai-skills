@@ -19,6 +19,7 @@ description: Windows에서 Markdown과 일반 텍스트를 UTF-8로 안전하게
 
 ## Verification
 - 쓰기 후 파일을 UTF-8 strict 모드로 다시 읽어야 합니다.
+- 다른 검사에서 최종 파일의 같은 UTF-8·문자 보존 검사를 완료했다면 `../runtime-management_work-runtime/SKILL.md`의 증거 재사용 조건을 적용해야 합니다.
 - U+FFFD, 비정상적인 물음표 반복 및 대표 한국어 문장의 손실 여부를 확인해야 합니다.
 - 콘솔 표시가 깨져 보이면 파일 바이트 또는 UTF-8 디코딩 결과와 구분해야 합니다.
 - 손상이 확인되면 추가 덮어쓰기를 중지하고 검증된 원본이나 버전 관리 상태에서 복구해야 합니다.

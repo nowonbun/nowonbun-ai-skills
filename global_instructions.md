@@ -76,11 +76,14 @@
 
 # Skill and MCP Operation Rules
 
-1. 스킬 실행 전에 스킬 선택 기준이 작업 요구 사항과 일치하는지 검증해야 합니다.
-2. `AGENTS.md`에 정의된 필수 소스 검증이 완료되기 전에는 MCP 도구를 호출해서는 안 됩니다.
-3. MCP 쓰기 작업 전에 서버별로 필수 매개변수의 존재 여부, 형식 및 대상 ID 일관성을 검증해야 합니다.
-4. MCP 쓰기 작업 후 작업 보고서에는 대상 ID, 실행 결과, 실패 사유(있는 경우) 및 재실행 필요성이 포함되어야 합니다.
-5. 매개변수 유효성을 검증할 수 없는 경우 실행을 중지해야 합니다.
+1. `AGENTS.md`에 정의된 필수 소스 검증이 완료되기 전에는 MCP 도구를 호출해서는 안 됩니다.
+2. 새 사용자 작업을 실행하기 전에 `mcp-skill` MCP의 `search_skills`를 작업 목적과 대상에 맞는 검색어로 한 번 호출한 다음, `list_skills`로 사용 가능한 스킬의 전체 목록을 확인해야 합니다. 필수 소스 검증이 필요한 작업에서는 1항의 검증을 먼저 완료해야 합니다.
+3. 검색 결과와 전체 목록의 메타데이터를 검토하여 관련 스킬이 있으면 해당 스킬의 본문만 확인하고, 선택 기준이 작업 요구 사항과 일치하는지 검증한 뒤 적용해야 합니다. 관련 스킬이 없으면 일반 절차로 진행해야 합니다.
+4. 같은 작업에서 검색과 전체 목록 조회를 반복해서는 안 됩니다. 작업 대상이나 실행 범위가 바뀐 경우에만 다시 조회해야 합니다.
+5. `mcp-skill` MCP를 사용할 수 없어 사전 검색 또는 전체 목록 확인을 완료할 수 없는 경우, 작업 실행을 중지하고 실패 원인과 재실행 조건을 보고해야 합니다.
+6. MCP 쓰기 작업 전에 서버별로 필수 매개변수의 존재 여부, 형식 및 대상 ID 일관성을 검증해야 합니다.
+7. MCP 쓰기 작업 후 작업 보고서에는 대상 ID, 실행 결과, 실패 사유(있는 경우) 및 재실행 필요성이 포함되어야 합니다.
+8. 매개변수 유효성을 검증할 수 없는 경우 실행을 중지해야 합니다.
 
 # Harness Composition Order
 
@@ -101,6 +104,10 @@
 @startuml
 start
 :Author global_instructions and AGENTS;
+:Validate required sources;
+:Search mcp-skill for relevant skills;
+:List all mcp-skill skills;
+:Select matching skills;
 :Invoke required skills only;
 if (Required skill and fallback unavailable?) then (yes)
   :Stop;
